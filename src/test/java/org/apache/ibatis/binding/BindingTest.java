@@ -78,6 +78,7 @@ public class BindingTest {
   public void shouldSelectBlogWithPostsUsingSubSelect() throws Exception {
     SqlSession session = sqlSessionFactory.openSession();
     try {
+      // jdk动态代理 生成的代理对象 继承了handler handler中有invoke方法  实现了mybatis缓存的接口类 实现的方法调用了invoke方法
       BoundBlogMapper mapper = session.getMapper(BoundBlogMapper.class);
       Blog b = mapper.selectBlogWithPostsUsingSubSelect(1);
       assertEquals(1, b.getId());
