@@ -134,6 +134,19 @@
   </properties>
 
   <dependencies>
+<!--    lombok-->
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+      <version>1.16.18</version>
+    </dependency>
+<!--    mysql连接器-->
+    <dependency>
+      <groupId>mysql</groupId>
+      <artifactId>mysql-connector-java</artifactId>
+      <version>8.0.22</version>
+    </dependency>
+
     <dependency>
       <groupId>ognl</groupId>
       <artifactId>ognl</artifactId>
@@ -332,6 +345,7 @@
               <exclude>org/apache/ibatis/javassist/**/*.class</exclude>
             </excludes>
           </instrumentation>
+          <check/>
         </configuration>
         <executions>
           <execution>
