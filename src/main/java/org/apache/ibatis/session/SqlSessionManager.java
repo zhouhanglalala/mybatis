@@ -37,13 +37,23 @@ import org.apache.ibatis.reflection.ExceptionUtil;
  */
 public class SqlSessionManager implements SqlSessionFactory, SqlSession {
 
+  /**
+   * sql会话工厂
+   */
   private final SqlSessionFactory sqlSessionFactory;
+  /**
+   * sql会话
+   */
   private final SqlSession sqlSessionProxy;
 
+  /**
+   * ThreadLocal维护会话
+   */
   private ThreadLocal<SqlSession> localSqlSession = new ThreadLocal<SqlSession>();
 
   private SqlSessionManager(SqlSessionFactory sqlSessionFactory) {
     this.sqlSessionFactory = sqlSessionFactory;
+    // jdk动态代理创建sql会话
     this.sqlSessionProxy = (SqlSession) Proxy.newProxyInstance(
         SqlSessionFactory.class.getClassLoader(),
         new Class[]{SqlSession.class},
@@ -325,7 +335,7 @@ public class SqlSessionManager implements SqlSessionFactory, SqlSession {
     }
   }
 
-  //代理模式
+  // sql会话拦截器作为handler
   private class SqlSessionInterceptor implements InvocationHandler {
     public SqlSessionInterceptor() {
         // Prevent Synthetic Access
@@ -335,14 +345,14 @@ public class SqlSessionManager implements SqlSessionFactory, SqlSession {
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
       final SqlSession sqlSession = SqlSessionManager.this.localSqlSession.get();
       if (sqlSession != null) {
-          //如果当前线程已经有SqlSession了，则直接调用
+          // 如果当前线程已经有SqlSession了，则直接调用
         try {
           return method.invoke(sqlSession, args);
         } catch (Throwable t) {
           throw ExceptionUtil.unwrapThrowable(t);
         }
       } else {
-          //如果当前线程没有SqlSession，先打开session，再调用,最后提交
+          // 如果当前线程没有SqlSession，先打开session，再调用,最后提交
         final SqlSession autoSqlSession = openSession();
         try {
           final Object result = method.invoke(autoSqlSession, args);

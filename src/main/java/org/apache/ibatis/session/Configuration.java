@@ -100,9 +100,22 @@ public class Configuration {
   protected Environment environment;
 
   //---------以下都是<settings>节点-------
+  /**
+   * 允许在嵌套语句中使用分页(RowBounds)
+   */
   protected boolean safeRowBoundsEnabled = false;
+  /**
+   * 允许在嵌套语句中使用分页（ResultHandler）
+   */
   protected boolean safeResultHandlerEnabled = true;
+  /**
+   * 是否开启自动驼峰命名规则
+   */
   protected boolean mapUnderscoreToCamelCase = false;
+  /**
+   * 开启懒加载的条件下 并且xml结果集里面某个属性关联了另一个select语句 如果为true 会在调用java对象的get属性时调用另一个sql
+   * 开启懒加载的条件下 如果为false 则按需查询数据
+   */
   protected boolean aggressiveLazyLoading = true;
   protected boolean multipleResultSetsEnabled = true;
   protected boolean useGeneratedKeys = false;
@@ -141,7 +154,9 @@ public class Configuration {
    * @see <a href='https://code.google.com/p/mybatis/issues/detail?id=300'>Issue 300</a> (google code)
    */
   protected Class<?> configurationFactory;
-
+  /**
+   * 拦截器链
+   */
   protected final InterceptorChain interceptorChain = new InterceptorChain();
   //类型处理器注册机
   protected final TypeHandlerRegistry typeHandlerRegistry = new TypeHandlerRegistry();
@@ -815,6 +830,7 @@ public class Configuration {
     }
 
     @SuppressWarnings("unchecked")
+    @Override
     public V put(String key, V value) {
       if (containsKey(key)) {
         //如果已经存在此key了，直接报错
@@ -836,6 +852,7 @@ public class Configuration {
       //可以看到，如果有包名，会放2个key到这个map，一个缩略，一个全名
     }
 
+    @Override
     public V get(Object key) {
       V value = super.get(key);
       //如果找不到相应的key，直接报错

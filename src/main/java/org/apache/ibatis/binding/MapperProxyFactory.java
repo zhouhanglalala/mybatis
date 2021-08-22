@@ -15,12 +15,18 @@
  */
 package org.apache.ibatis.binding;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.ibatis.session.SqlSession;
+
+import sun.misc.ProxyGenerator;
 
 /**
  * @author Lasse Voss
@@ -47,7 +53,28 @@ public class MapperProxyFactory<T> {
 
   @SuppressWarnings("unchecked")
   protected T newInstance(MapperProxy<T> mapperProxy) {
-    //用JDK自带的动态代理生成映射器
+    // 输出代理对象文件
+//    String name = "MapperProxyClass";
+//    byte[] data = ProxyGenerator.generateProxyClass(name, new Class[] { mapperInterface });
+//    FileOutputStream out = null;
+//    try {
+//      out = new FileOutputStream(name + ".class");
+//      System.out.println((new File("MapperProxyClass")).getAbsolutePath());
+//      out.write(data);
+//    } catch (FileNotFoundException e) {
+//      e.printStackTrace();
+//    } catch (IOException e) {
+//      e.printStackTrace();
+//    } finally {
+//      if (null != out) {
+//        try {
+//          out.close();
+//        } catch (IOException e) {
+//          e.printStackTrace();
+//        }
+//      }
+//    }
+    // 用JDK自带的动态代理生成映射器
     return (T) Proxy.newProxyInstance(mapperInterface.getClassLoader(), new Class[] { mapperInterface }, mapperProxy);
   }
 
@@ -55,5 +82,7 @@ public class MapperProxyFactory<T> {
     final MapperProxy<T> mapperProxy = new MapperProxy<T>(sqlSession, mapperInterface, methodCache);
     return newInstance(mapperProxy);
   }
+
+
 
 }

@@ -153,6 +153,9 @@ public class MapperAnnotationBuilder {
     }
   }
 
+  /**
+   * 加载sql的xml文件并解析
+   */
   private void loadXmlResource() {
     // Spring may not know the real resource name so we check a flag
     // to prevent loading again a resource twice

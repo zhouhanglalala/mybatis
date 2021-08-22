@@ -60,16 +60,25 @@ public class BindingTest {
 
   @BeforeClass
   public static void setup() throws Exception {
+    // 创建数据源
     DataSource dataSource = BaseDataTest.createBlogDataSource();
+    // 执行建表语句
     BaseDataTest.runScript(dataSource, BaseDataTest.BLOG_DDL);
+    // 执行插入语句
     BaseDataTest.runScript(dataSource, BaseDataTest.BLOG_DATA);
+    // 创建事务工厂
     TransactionFactory transactionFactory = new JdbcTransactionFactory();
+    // 创建环境
     Environment environment = new Environment("Production", transactionFactory, dataSource);
+    // 创建配置
     Configuration configuration = new Configuration(environment);
+    // 设置懒加载为真
     configuration.setLazyLoadingEnabled(true);
+    // 注册类型别名
     configuration.getTypeAliasRegistry().registerAlias(Blog.class);
     configuration.getTypeAliasRegistry().registerAlias(Post.class);
     configuration.getTypeAliasRegistry().registerAlias(Author.class);
+    // 添加mapper接口的类
     configuration.addMapper(BoundBlogMapper.class);
     configuration.addMapper(BoundAuthorMapper.class);
     sqlSessionFactory = new SqlSessionFactoryBuilder().build(configuration);

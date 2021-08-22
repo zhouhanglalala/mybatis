@@ -1,6 +1,7 @@
 package org.apache.ibatis.submitted.rounding;
 
 import java.io.Reader;
+import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.sql.Connection;
@@ -54,9 +55,11 @@ public class RoundingHandlersTest {
   }
 
   @Test
-  public void shouldInsertUser2() {
+  public void shouldInsertUser2() throws ClassNotFoundException, NoSuchMethodException {
     SqlSession session = sqlSessionFactory.openSession();
-    try {
+//    try {
+//      Method m3 = Class.forName("org.apache.ibatis.submitted.rounding.Mapper").getMethod("insert",
+//                                                                                         new Class[] { Class.forName("org.apache.ibatis.submitted.rounding.User") });
       Mapper mapper = session.getMapper(Mapper.class);
       User user = new User();
       user.setId(2);
@@ -65,9 +68,13 @@ public class RoundingHandlersTest {
       user.setRoundingMode(RoundingMode.UNNECESSARY);
       mapper.insert(user);
       mapper.insert2(user);
-    } finally {
-      session.close();
-    }
+//    } catch (ClassNotFoundException e) {
+//      e.printStackTrace();
+//    } catch (NoSuchMethodException e) {
+//      e.printStackTrace();
+//    } finally {
+//      session.close();
+//    }
   }
 
 }

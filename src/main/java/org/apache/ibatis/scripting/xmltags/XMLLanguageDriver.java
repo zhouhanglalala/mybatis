@@ -15,6 +15,10 @@
  */
 package org.apache.ibatis.scripting.xmltags;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Properties;
+
 import org.apache.ibatis.builder.xml.XMLMapperEntityResolver;
 import org.apache.ibatis.executor.parameter.ParameterHandler;
 import org.apache.ibatis.mapping.BoundSql;
@@ -67,6 +71,14 @@ public class XMLLanguageDriver implements LanguageDriver {
         return new RawSqlSource(configuration, script, parameterType);
       }
     }
+  }
+
+  public static void main(String[] args) {
+    Properties properties = new Properties();
+    properties.put("limit","123123");
+    String sql="<select>adfsdf <if test=\"limit != null\">\n" + "     ${limit}\n" + "    </if>dsasdf </select>";
+    XPathParser parser = new XPathParser(sql, false, properties, new XMLMapperEntityResolver());
+    System.out.println(parser.evalNode("/select"));
   }
 
 }

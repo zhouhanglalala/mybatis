@@ -45,7 +45,7 @@ public class PreparedStatementHandler extends BaseStatementHandler {
 
   @Override
   public int update(Statement statement) throws SQLException {
-    //调用PreparedStatement.execute和PreparedStatement.getUpdateCount
+    // 调用PreparedStatement.execute和PreparedStatement.getUpdateCount
     PreparedStatement ps = (PreparedStatement) statement;
     ps.execute();
     int rows = ps.getUpdateCount();
